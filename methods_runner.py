@@ -1,18 +1,18 @@
+from sklearn.model_selection import cross_val_score
+import utils
+from sklearn.model_selection import train_test_split
+from sklearn.neural_network import MLPClassifier
+from sklearn.linear_model import SGDClassifier, LogisticRegression, LinearRegression
+from sklearn.naive_bayes import MultinomialNB
+from sklearn.neighbors import KNeighborsClassifier
+from sklearn.svm import LinearSVC
+from sklearn.ensemble import RandomForestClassifier, AdaBoostClassifier, GradientBoostingClassifier
+import pandas as pd
+import numpy as np
 import warnings
 
 warnings.filterwarnings("ignore")
 
-import numpy as np
-import pandas as pd
-from sklearn.ensemble import RandomForestClassifier, AdaBoostClassifier, GradientBoostingClassifier
-from sklearn.svm import LinearSVC
-from sklearn.neighbors import KNeighborsClassifier
-from sklearn.naive_bayes import MultinomialNB
-from sklearn.linear_model import SGDClassifier, LogisticRegression, LinearRegression
-from sklearn.neural_network import MLPClassifier
-from sklearn.model_selection import train_test_split
-import utils
-from sklearn.model_selection import cross_val_score
 
 data = utils.read_file("train_2.csv")
 height, width = data.shape
@@ -208,10 +208,10 @@ for item in methods:
         model = methods[item]["class"]()
     else:
         model = methods[item]["class"](**methods[item]["args"])
-    # model.fit(XTrain, YTrain)
-
-    valScore = cross_val_score(model, XTrain, YTrain, cv=100, n_jobs=-1, scoring="neg_mean_squared_error")
-    print(max(valScore) * -1)
-
     model.fit(XTrain, YTrain)
+
+    # valScore = cross_val_score(model, XTrain, YTrain, cv=100, n_jobs=-1, scoring="neg_mean_squared_error")
+    # print(max(valScore) * -1)
+
+    # model.fit(XTrain, YTrain)
     utils.validate(model.predict(XTest), YTest)
